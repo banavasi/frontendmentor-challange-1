@@ -41,11 +41,11 @@ const App: React.FC = () => {
                 <div className="w-3/4 lg:w-2/5  mx-auto">
                   <input
                     type="text"
-                    className="p-4 bg-base-200 w-full rounded-sm"
+                    className="p-4 dark:bg-base-200 bg-base-100 w-full rounded-sm drop-shadow-xl"
                   />
-                  <ul className="mt-5">
+                  <ul className="mt-5 drop-shadow-xl dark:shadow-xl dark:shadow-lg-400/40">
                     {Array.from({ length: 5 }).map((_, i) => (
-                      <li className="p-4 bg-base-200 shadow-current  h-18 w-full rounded-sm text-base-content border-base-100 border-t">
+                      <li className="p-4 dark:bg-base-200 bg-base-100 h-18 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0">
                         test-{i}
                       </li>
                     ))}
