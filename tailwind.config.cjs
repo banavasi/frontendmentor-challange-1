@@ -4,7 +4,7 @@ module.exports = {
   theme: {
     extend: {},
   },
-  plugins: [require("daisyui")],
+  plugins: [require("daisyui"),require("@tailwindcss/forms")],
   daisyui: {
     themes: [
       {
@@ -14,6 +14,7 @@ module.exports = {
           "base-300": "hsl(233, 14%, 35%)",
           "base-200": "hsl(235, 24%, 19%)",
           "base-100": "hsl(235, 21%, 11%)",
+          "accent-content":"hsl(234, 39%, 85%)",
         },
         light: {
           primary: "hsl(220, 98%, 61%)",
