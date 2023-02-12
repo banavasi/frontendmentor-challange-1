@@ -1,26 +1,11 @@
 /**
- * ul parent
-    checkbox text | button
-    checkbox text | button
-    checkbox text | button
-
+ * ul
+    li (checkbox:input and todo,label:text|delete icon:svg)
     actions
-      total| filters| clear completed
-  
-
+      total:button|filters(active,completed,all):button|clear completed:button
  */
 
-import React, {
-  useState,
-  useEffect,
-  MouseEvent,
-  SyntheticEvent,
-  FC,
-} from "react";
-
-type CheckBoxProps = {
-  id: number;
-};
+import React, { useState, useEffect, MouseEvent, FC } from "react";
 
 type Task = {
   id: number;
@@ -38,15 +23,11 @@ const App: React.FC = () => {
     const colorSchemeQuery = window.matchMedia("(prefers-color-scheme: dark)");
     colorSchemeQuery.addEventListener("change", handleColorSchemeChange);
     setTheme(colorSchemeQuery.matches ? "dark" : "light");
-
     return () => {
       colorSchemeQuery.removeEventListener("change", handleColorSchemeChange);
     };
   }, []);
 
-  const handleMouseOver = (e: SyntheticEvent) => {
-    console.log("mouse over" + e);
-  };
   return (
     <>
       <main data-theme={theme}>
@@ -71,10 +52,40 @@ const App: React.FC = () => {
             <div className="container mx-auto">
               <div className="flex-row">
                 <div className="w-3/4 lg:w-2/5  mx-auto">
-                  <h2 className="text-3xl text-base-content mb-6 font-bold">TODO</h2>
+                  <div className="flex justify-between">
+                    <h1 className="text-3xl font-bold text-center text-base-content">
+                      Todo
+                    </h1>
+                    <div className="theme-switch">
+                      <input
+                        type="checkbox"
+                        id="theme-switch"
+                        className="theme-switch-checkbox hidden"
+                        onClick={() =>
+                          setTheme((prev) =>
+                            prev === "light" ? "dark" : "light"
+                          )
+                        }
+                      />
+                      <label
+                        htmlFor="theme-switch"
+                        className="theme-switch-label"
+                      >
+                        {theme !== "light" ? (
+                          <div className="theme-switch-inner">
+                            <img src="../src/assets/icon-sun.svg" alt="" />
+                          </div>
+                        ) : (
+                          <div className="theme-switch-inner">
+                            <img src="../src/assets/icon-moon.svg" alt="" />
+                          </div>
+                        )}
+                      </label>
+                    </div>
+                  </div>
                   <input
                     type="text"
-                    className="p-4 dark:bg-base-200 bg-base-100 w-full rounded-sm drop-shadow-xl"
+                    className="p-4 dark:bg-base-200 bg-base-100 w-full rounded-sm drop-shadow-xl border-0"
                   />
                   <TasksList />
                   <p className="mt-5 text-xs text-base-300 text-center">
@@ -91,6 +102,7 @@ const App: React.FC = () => {
 };
 
 const TasksList: FC = () => {
+  const [active, setActive] = useState<"all" | "active" | "completed">("all");
   const [tasks, setTasks] = useState<Task[]>([
     {
       id: 0,
@@ -108,6 +120,7 @@ const TasksList: FC = () => {
       completed: false,
     },
   ]);
+
   const handleCompleteTask = (e: MouseEvent, i: number) => {
     setTasks(
       tasks.map((task) => {
@@ -117,70 +130,125 @@ const TasksList: FC = () => {
         return task;
       })
     );
-    console.log(tasks);
   };
 
+  let filteredTasks: Task[] = [];
+  if (active === "all") {
+    filteredTasks = tasks;
+  } else if (active === "active") {
+    filteredTasks = tasks.filter((task) => !task.completed);
+  } else if (active === "completed") {
+    filteredTasks = tasks.filter((task) => task.completed);
+  }
+  useEffect(() => {
+    console.log("tasks", tasks);
+  }, [tasks]);
+  const handleTaskDelete = (i: number) => {
+    setTasks(tasks.filter((task) => task.id !== i));
+    console.log("handleTaskDelete" + i);
+  };
+  const handleClearCompleteTask: () => void = () => {
+    setTasks(tasks.filter((task) => !task.completed));
+  };
+  let activeTasks = tasks.filter((task) => !task.completed);
   return (
-    <ul className="mt-5 drop-shadow-xl dark:shadow-xl dark:shadow-lg-400/40">
-      {tasks.map((_, i) => (
-        <li
-          key={i}
-          id={`element-${i}`}
-          onClick={(e) => handleCompleteTask(e, i)}
-          className="hover:bg-red-500 cursor-pointer group p-4 dark:bg-base-200 bg-base-100 h-18 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0"
-        >
-          <div className="flex justify-between items-center  group-hover:text-white">
-            <div className="flex items-center">
-              <label
-                className={
-                  tasks[i]?.completed
-                    ? "line-through text-base-300 flex items-center space-x-2"
-                    : "text-base-content flex items-center space-x-2"
-                }
-              >
-                <input
-                  type="checkbox"
-                  id={`default-checkbox-${i}`}
-                  readOnly
-                  onClick={(e) => e.stopPropagation()}
-                  checked={tasks[i]?.completed}
-                  className="h-5 w-5 rounded-full border-1 border-base-300 bg-transparent transition-colors duration-200 ease-in-out"
-                />
-                <span className="space-x-3">
-                  {tasks[i]?.text}
-                </span>
-              </label>
-            </div>
-            <IconCross taskId={i} />
+    <div className="drop-shadow-xl dark:shadow-xl mt-5 dark:shadow-lg-400/40 dark:bg-base-200 bg-base-100 ">
+      <ul className="">
+        {filteredTasks.length > 0 ? (
+          filteredTasks.map((task, i) => (
+            <li
+              key={i}
+              id={`element-${task.id}`}
+              onClick={(e) => handleCompleteTask(e, task.id)}
+              className="hover:bg-red-500 cursor-pointer group min-h-16 p-4 h-18 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0"
+            >
+              <div className="flex justify-between items-center  group-hover:text-white">
+                <div className="flex items-center">
+                  <label
+                    className={
+                      task.completed
+                        ? "line-through text-base-300 flex items-center space-x-2"
+                        : "text-base-content flex items-center space-x-2"
+                    }
+                  >
+                    <input
+                      type="checkbox"
+                      id={`default-checkbox-${task.id}`}
+                      readOnly
+                      onClick={(e) => e.stopPropagation()}
+                      checked={task.completed}
+                      className="h-5 w-5 rounded-full border-1 border-base-300 bg-transparent transition-colors duration-200 ease-in-out"
+                    />
+                    <span className="space-x-3">{task.text}</span>
+                  </label>
+                </div>
+                <IconCross taskId={task.id} deleteTask={handleTaskDelete} />
+              </div>
+            </li>
+          ))
+        ) : (
+          <div className="min-h-16 flex justify-center place-items-center">
+            <p className="text-base-300">No tasks found</p>
           </div>
-        </li>
-      ))}
-      <li className="p-4 dark:bg-base-200 bg-base-100 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0 flex justify-between content-center">
+        )}
+      </ul>
+      <div className="p-4  w-full rounded-sm text-base-content border-base-300 border-t flex justify-between content-center">
         <div className="total flex items-center">
-          <p className="text-base-300 text-xs">2 items left</p>
+          <p className="text-base-300 text-xs">
+            {activeTasks.length} items left
+          </p>
         </div>
         <div className="filters flex content-between text-center">
-          <button className="text-base-300 text-xs pr-4">All</button>
-          <button className="text-base-300 text-xs pr-4 text-primary font-bold">
+          <button
+            onClick={(e) => setActive("all")}
+            className={`text-xs pr-4 ${
+              active !== "all" ? "text-base-300" : "text-primary font-bold"
+            }`}
+          >
+            All
+          </button>
+          <button
+            onClick={(e) => setActive("completed")}
+            className={`text-xs pr-4 ${
+              active !== "completed"
+                ? "text-base-300"
+                : "text-primary font-bold"
+            }`}
+          >
+            Completed
+          </button>
+          <button
+            onClick={(e) => setActive("active")}
+            className={`text-xs pr-4 ${
+              active !== "active" ? "text-base-300" : "text-primary font-bold"
+            }`}
+          >
             Active
           </button>
-          <button className="text-base-300 text-xs pr-4">Completed</button>
         </div>
         <div className="clear">
-          <button className="appearance-none text-base-300 text-xs">
+          <button
+            className="appearance-none text-base-300 text-xs"
+            onClick={handleClearCompleteTask}
+          >
             Clear Completed
           </button>
         </div>
-      </li>
-    </ul>
+      </div>
+    </div>
   );
 };
 
-function IconCross({ taskId }: { taskId: number }) {
+type TaskItem = {
+  taskId: number;
+  deleteTask: (taskId: number) => void;
+};
+
+function IconCross({ taskId, deleteTask }: TaskItem) {
   // 1. Define function to handle click events
   const onClickHandel = (e: MouseEvent) => {
+    deleteTask(taskId);
     e.stopPropagation();
-    console.log("delete" + taskId);
   };
 
   // 2. Return SVG icon wrapped in span with onClick event handler
