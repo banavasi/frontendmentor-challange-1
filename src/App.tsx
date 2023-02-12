@@ -71,7 +71,7 @@ const App: React.FC = () => {
             <div className="container mx-auto">
               <div className="flex-row">
                 <div className="w-3/4 lg:w-2/5  mx-auto">
-                  <h2 className="text-2xl text-base-content mb-6">TODO</h2>
+                  <h2 className="text-3xl text-base-content mb-6 font-bold">TODO</h2>
                   <input
                     type="text"
                     className="p-4 dark:bg-base-200 bg-base-100 w-full rounded-sm drop-shadow-xl"
@@ -161,7 +161,7 @@ const TasksList: FC = () => {
         </div>
         <div className="filters flex content-between text-center">
           <button className="text-base-300 text-xs pr-4">All</button>
-          <button className="text-base-300 text-xs pr-4 text-primary">
+          <button className="text-base-300 text-xs pr-4 text-primary font-bold">
             Active
           </button>
           <button className="text-base-300 text-xs pr-4">Completed</button>
