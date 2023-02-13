@@ -6,7 +6,10 @@
  */
 
 import React, { useState, useEffect, MouseEvent, FC } from "react";
-
+import darkImage from "./assets/bg-desktop-dark.jpg";
+import lightImage from "./assets/bg-desktop-light.jpg";
+import sunImage from "./assets/icon-sun.svg";
+import moonImage from "./assets/icon-moon.svg";
 type Task = {
   id: number;
   text: string;
@@ -34,12 +37,12 @@ const App: React.FC = () => {
         <section id="hero">
           <picture>
             <source
-              srcSet="../src/assets/bg-desktop-dark.jpg"
+              srcSet={darkImage}
               media="(prefers-color-scheme: dark)"
               className="h-[45vh] object-cover"
             />
             <img
-              src="../src/assets/bg-desktop-light.jpg"
+              srcSet={lightImage}
               alt="desktop bg dark"
               className="h-[45vh] object-cover"
             />
@@ -73,11 +76,11 @@ const App: React.FC = () => {
                       >
                         {theme !== "light" ? (
                           <div className="theme-switch-inner">
-                            <img src="../src/assets/icon-sun.svg" alt="" />
+                            <img src={sunImage} alt="" />
                           </div>
                         ) : (
                           <div className="theme-switch-inner">
-                            <img src="../src/assets/icon-moon.svg" alt="" />
+                            <img src={moonImage} alt="" />
                           </div>
                         )}
                       </label>
