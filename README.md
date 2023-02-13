@@ -109,57 +109,26 @@ Use this section to outline areas that you want to continue focusing on in futur
 - Frontend Mentor - [@yourusername](https://www.frontendmentor.io/profile/yourusername)
 - Twitter - [@yourusername](https://www.twitter.com/yourusername)
 
-**Note: Delete this note and add/remove/edit lines above based on what links you'd like to share.**
-
 ## Acknowledgments
-
-This is where you can give a hat tip to anyone who helped you out on this project. Perhaps you worked in a team or got some inspiration from someone else's solution. This is the perfect place to give them some credit.
-
-**Note: Delete this note and edit this section's content as necessary. If you completed this challenge by yourself, feel free to delete this section entirely.**
-
-# Front-end Style Guide
-
-## Layout
-
-The designs were created to the following widths:
-
-- Mobile: 375px
-- Desktop: 1440px
-
-## Colors
-
-### Primary
-
-- Bright Blue: hsl(220, 98%, 61%)
-- Check Background: linear-gradient hsl(192, 100%, 67%) to hsl(280, 87%, 65%)
-
-### Neutral
-
-### Light Theme
-
-- Very Light Gray: hsl(0, 0%, 98%)
-- Very Light Grayish Blue: hsl(236, 33%, 92%)
-- Light Grayish Blue: hsl(233, 11%, 84%) base-100
-- Dark Grayish Blue: hsl(236, 9%, 61%) base-200
-- Very Dark Grayish Blue: hsl(235, 19%, 35%) base-300
-
-### Dark Theme
-
-- Very Dark Blue: hsl(235, 21%, 11%)
-- Very Dark Desaturated Blue: hsl(235, 24%, 19%)
-- Light Grayish Blue: hsl(234, 39%, 85%)
-- Light Grayish Blue (hover): hsl(236, 33%, 92%)
-- Dark Grayish Blue: hsl(234, 11%, 52%) base-100
-- Very Dark Grayish Blue: hsl(233, 14%, 35%) base-200
-- Very Dark Grayish Blue: hsl(237, 14%, 26%) base-300
-
-## Typography
-
-### Body Copy
-
-- Font size: 18px
-
-### Font
-
-- Family: [Josefin Sans](https://fonts.google.com/specimen/Josefin+Sans)
-- Weights: 400, 700
+next steps
+- create following components
+  - BaseInput
+  - TaskList
+  - CheckBox
+  - linkButton
+  - LinkImage
+- Transistions
+  - Adding a new task
+  - deleting a task
+  - change in the state
+  - theme change
+  - Add music when a new task is added
+  - add music whena task is deleted
+- Dnd functionality
+- integrate cognito authenication
+- use amplify to register user
+- use dynamodb to store the tasks
+- use api to get the tasks
+- login page
+- register page
+- about page
