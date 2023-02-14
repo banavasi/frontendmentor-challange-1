@@ -12,4 +12,5 @@ export type TodoStore = {
     clearCompletedTasks: () => void;
     showCompletedTasks: () => void;
     showActiveTasks: () => void;
+    updateOrder: (newOrder: Todo[]) => void;
   };

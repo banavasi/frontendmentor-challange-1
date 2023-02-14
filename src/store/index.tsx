@@ -11,6 +11,7 @@ const defaultState: TodoStore = {
   clearCompletedTasks: () => {},
   showCompletedTasks: () => {},
   showActiveTasks: () => {},
+  updateOrder: () => {},
 };
 
 // 2. Create store and add persistence middleware
@@ -19,6 +20,7 @@ export const useTodosStore = create<TodoStore>()(
     (set, get) => ({
       ...defaultState,
       addTodo: (newTodo: Todo) => set({ todos: [...get().todos, newTodo] }),
+      updateOrder: (newOrder: Todo[]) => set({ todos: newOrder }),
       deleteTodo: (todoId: number) =>
         set({ todos: get().todos.filter((todo: Todo) => todo.id !== todoId) }),
       toggleTodo: (todoId: number) =>

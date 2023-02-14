@@ -77,11 +77,9 @@ const App: React.FC = () => {
                 />
               </form>
               {/* Task List */}
-              <div className="drop-shadow-xl dark:shadow-xl mt-5 dark:shadow-lg-400/40 dark:bg-base-200 bg-base-100 max-h-96 overflow-y-auto">
-                {filteredTasks.map((task: TypeTask) => (
-                  <Task key={task.id} tasks={[task]} />
-                ))}
-                <div className="p-4  w-full rounded-sm text-base-content border-base-300 border-t flex justify-between content-center">
+              <div className="drop-shadow-xl dark:shadow-xl mt-5">
+                <Task tasks={filteredTasks} />
+                <div className="p-4 w-full rounded-sm dark:bg-base-200 bg-base-100 text-base-content  border-base-300 border-t flex justify-between content-center">
                   <div className="total flex items-center">
                     <p className="text-base-300 text-xs">
                       {todos.length} items left

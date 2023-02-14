@@ -1,24 +1,33 @@
 import React, { MouseEvent, ReactNode } from "react";
 import { useTodosStore } from "../../store";
-import { motion } from "framer-motion";
+import { motion, AnimatePresence, Reorder } from "framer-motion";
 
 const container = {
-  hidden: { opacity: 1, scale: 0 },
-  visible: {
-    opacity: 1,
-    scale: 1,
+  hidden: {
     transition: {
-      delayChildren: 0.3,
-      staggerChildren: 0.2,
+      staggerChildren: 0.1,
+      staggerDirection: -1,
+    },
+  },
+  visible: {
+    transition: {
+      staggerChildren: 0.1,
     },
   },
 };
 
 const item = {
-  hidden: { y: 20, opacity: 0 },
+  hidden: {
+    opacity: 0,
+    x: -16,
+  },
   visible: {
-    y: 0,
     opacity: 1,
+    x: 0,
+  },
+  exit: {
+    opacity: 0,
+    x: -16,
   },
 };
 
@@ -45,68 +54,78 @@ type TaskListProps = {
 };
 
 export const Task = ({ tasks }: TaskListProps) => {
+  const { updateOrder } = useTodosStore();
   return (
-    <motion.ul
+    <motion.ul >
+      <Reorder.Group
+      values={tasks}
       variants={container}
       initial="hidden"
-      className="hover:bg-red-500 cursor-pointer group min-h-16 p-4 h-18 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0"
       animate="visible"
+      exit="exit"
+      onReorder={updateOrder}
+      className="max-h-96 overflow-y-auto min-h-16 dark:shadow-lg-400/40 shadow-lg"
     >
-      {tasks.map((task: TypeTask) => (
-        <TaskList
+      {tasks.map((task: TypeTask, i: number) => (
+        <Reorder.Item
+          initial={{ opacity: 0, y: 20 }}
+          animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
+          exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+          whileDrag={{ backgroundColor: "#e3e3e3" }}
           key={task.id}
-          id={task.id}
-          text={task.text}
-          completed={task.completed}
-        />
+          value={task}
+          className="dark:bg-base-200 bgbase-100 cursor-pointer p-4 w-full rounded-sm text-base-content border-base-300 border-t"
+          data-task-id={task.id}
+          variants={item}
+        >
+          <TaskList
+            key={task.id}
+            id={task.id}
+            text={task.text}
+            completed={task.completed}
+          />
+        </Reorder.Item>
       ))}
-    </motion.ul>
+    </Reorder.Group>
+      </motion.ul>
   );
 };
 
 export const TaskList = ({ id, text, completed }: TypeTask) => {
-
   const { toggleTodo } = useTodosStore();
-  
+
   const handleCompleteTask = (e: MouseEvent<HTMLDivElement>) => {
-    e.stopPropagation()
     toggleTodo(id);
   };
-  
+
   return (
-    <motion.li
-      className="hover:bg-red-500 cursor-pointer group min-h-16 p-4 h-18 w-full rounded-sm text-base-content border-base-300 border-t first-of-type:border-0"
-      data-task-id={id}
+    <div
+      className="flex justify-between items-center  group-hover:text-white"
       onClick={(e) => handleCompleteTask(e)}
-      variants={item}
     >
-      <div className="flex justify-between items-center  group-hover:text-white">
-        <div className="flex items-center">
-          <label
-            className={
-              completed
-                ? "line-through text-base-300 flex items-center space-x-2"
-                : "text-base-content flex items-center space-x-2"
-            }
-          >
-            <input
-              type="checkbox"
-              id={`default-checkbox-${id}`}
-              readOnly
-              onClick={(e) => handleCompleteTask(e)}
-              checked={completed}
-              className="h-5 w-5 rounded-full border-1 border-base-300 bg-transparent transition-colors duration-200 ease-in-out"
-            />
-            <span className="space-x-3">{text}</span>
-          </label>
-        </div>
-        <IconCross taskId={id} />
+      <div className="flex items-center">
+        <label
+          className={
+            completed
+              ? "line-through text-base-300 flex items-center space-x-2"
+              : "text-base-content flex items-center space-x-2"
+          }
+        >
+          <input
+            type="checkbox"
+            id={`default-checkbox-${id}`}
+            readOnly
+            onClick={(e) => handleCompleteTask(e)}
+            checked={completed}
+            className="h-5 w-5 rounded-full border-1 border-base-300 bg-transparent transition-colors duration-200 ease-in-out"
+          />
+          <span className="space-x-3">{text}</span>
+        </label>
       </div>
-    </motion.li>
+      <IconCross taskId={id} />
+    </div>
   );
 };
-
-
 
 function IconCross({ taskId }: TaskItem) {
   // 1. Define function to handle click events
