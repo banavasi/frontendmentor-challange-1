@@ -56,8 +56,7 @@ type TaskListProps = {
 export const Task = ({ tasks }: TaskListProps) => {
   const { updateOrder } = useTodosStore();
   return (
-    <motion.ul >
-      <Reorder.Group
+    <Reorder.Group
       values={tasks}
       variants={container}
       initial="hidden"
@@ -66,28 +65,33 @@ export const Task = ({ tasks }: TaskListProps) => {
       onReorder={updateOrder}
       className="max-h-96 overflow-y-auto min-h-16 dark:shadow-lg-400/40 shadow-lg"
     >
-      {tasks.map((task: TypeTask, i: number) => (
-        <Reorder.Item
-          initial={{ opacity: 0, y: 20 }}
-          animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
-          exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
-          whileDrag={{ backgroundColor: "#e3e3e3" }}
-          key={task.id}
-          value={task}
-          className="dark:bg-base-200 bgbase-100 cursor-pointer p-4 w-full rounded-sm text-base-content border-base-300 border-t"
-          data-task-id={task.id}
-          variants={item}
-        >
-          <TaskList
-            key={task.id}
-            id={task.id}
-            text={task.text}
-            completed={task.completed}
-          />
-        </Reorder.Item>
-      ))}
+      {tasks.length > 0 ? (
+        <AnimatePresence>
+          {tasks.map((task: TypeTask, i: number) => (
+            <Reorder.Item
+              initial={{ opacity: 0, y: 20 }}
+              animate={{ opacity: 1, y: 0, transition: { duration: 0.3 } }}
+              exit={{ opacity: 0, y: 20, transition: { duration: 0.3 } }}
+              whileDrag={{ backgroundColor: "#e3e3e3" }}
+              key={task.id}
+              value={task}
+              className="dark:bg-base-200 bgbase-100 cursor-pointer p-4 w-full rounded-sm text-base-content border-base-300 border-t"
+              data-task-id={task.id}
+              variants={item}
+            >
+              <TaskList
+                key={task.id}
+                id={task.id}
+                text={task.text}
+                completed={task.completed}
+              />
+            </Reorder.Item>
+          ))}
+        </AnimatePresence>
+      ) : (
+        <div className="text-base-content text-center p-4 dark:bg-base-200 bgbase-100 cursor-pointer w-full rounded-sm border-base-300 border-t">No tasks yet</div>
+      )}
     </Reorder.Group>
-      </motion.ul>
   );
 };
 
