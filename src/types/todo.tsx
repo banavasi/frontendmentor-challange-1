@@ -9,4 +9,7 @@ export type TodoStore = {
     addTodo: (newTodo: Todo) => void;
     deleteTodo: (todoId: number) => void;
     toggleTodo: (todoId: number) => void;
+    clearCompletedTasks: () => void;
+    showCompletedTasks: () => void;
+    showActiveTasks: () => void;
   };

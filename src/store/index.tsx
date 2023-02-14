@@ -1,11 +1,41 @@
-import { create } from 'zustand'
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
+import { Todo, TodoStore } from "../types/todo";
 
-interface BearState {
-  bears: number
-  increase: (by: number) => void
-}
+// 1. Define default state
+const defaultState: TodoStore = {
+  todos: [],
+  addTodo: () => {},
+  deleteTodo: () => {},
+  toggleTodo: () => {},
+  clearCompletedTasks: () => {},
+  showCompletedTasks: () => {},
+  showActiveTasks: () => {},
+};
 
-export const useBearStore = create<BearState>()((set) => ({
-  bears: 0,
-  increase: (by) => set((state) => ({ bears: state.bears + by })),
-}))
+// 2. Create store and add persistence middleware
+export const useTodosStore = create<TodoStore>()(
+  persist(
+    (set, get) => ({
+      ...defaultState,
+      addTodo: (newTodo: Todo) => set({ todos: [...get().todos, newTodo] }),
+      deleteTodo: (todoId: number) =>
+        set({ todos: get().todos.filter((todo: Todo) => todo.id !== todoId) }),
+      toggleTodo: (todoId: number) =>
+        set({
+          todos: get().todos.map((todo: Todo) =>
+            todo.id === todoId
+              ? { ...todo, completed: !todo.completed } // flip completed flag
+              : todo
+          ),
+        }),
+      clearCompletedTasks: () =>
+        set({ todos: get().todos.filter((todo: Todo) => !todo.completed) }),
+      showCompletedTasks: () =>
+        set({ todos: get().todos.filter((todo: Todo) => todo.completed) }),
+      showActiveTasks: () =>
+        set({ todos: get().todos.filter((todo: Todo) => !todo.completed) }),
+    }),
+    { name: "todo-store", version: 1.1 }
+  )
+);
